@@ -1,0 +1,525 @@
+# LeadForge — RESUME FROM CURRENT PRODUCTION TRUTH TEST
+# DO NOT START OVER — CONTINUE FROM EXISTING STATE
+
+We are stopping work for today.
+
+IMPORTANT:
+The current LeadForge multi-industry production discovery acceptance test is ALREADY RUNNING in the background.
+
+DO NOT:
+- start a second production discovery run
+- reset the database
+- delete existing records
+- create mock/test data
+- seed fixtures
+- fabricate missing values
+- assume the run succeeded
+- report intermediate numbers as final
+- declare production-ready before final validation
+
+We need to RESUME FROM THE CURRENT DATABASE / TASK STATE.
+
+============================================================
+CURRENT PROJECT STATE
+============================================================
+
+Project:
+LeadForge
+
+Goal:
+Production-grade genuine lead acquisition.
+
+Primary requirement:
+Every lead must be a REAL business discovered from LIVE public sources and must have evidence-backed factual fields.
+
+The system must prefer FEWER genuine leads over large numbers of questionable leads.
+
+No fabrication is acceptable.
+
+Missing factual data must remain:
+
+email = NULL
+phone = NULL
+contact_name = NULL
+job_title = NULL
+
+Unknown buying intent must remain:
+
+intent_status = UNKNOWN
+intent_score = 0
+
+DNS MX availability must NEVER be represented as mailbox verification.
+
+============================================================
+CURRENT PRODUCTION RUN
+============================================================
+
+A multi-industry production discovery acceptance test has already been launched.
+
+Latest known task:
+task-1175
+
+Target industries:
+
+1. Restaurant
+2. Dentist / Dental Clinic
+3. Law Firm
+4. Real Estate
+5. Hotel / Hospitality
+6. Gym / Fitness
+7. E-Commerce / Retail
+
+Current geographic test sequence:
+
+London → Restaurants
+Sydney → Dentists
+New York → Law Firms
+Toronto → Real Estate
+Paris → Hotels
+Berlin → Gyms
+Los Angeles → E-Commerce / Retail
+
+Known intermediate result:
+
+London Restaurants:
+processed
+
+Sydney Dentists:
+processed
+
+NYC Law Firms:
+5 verified official websites
+1 evidence-qualified lead
+
+Toronto / Paris / Berlin / Los Angeles:
+were still processing at the last known status.
+
+IMPORTANT:
+These are INTERMEDIATE results only.
+
+DO NOT treat them as final.
+
+============================================================
+WHAT TO DO FIRST WHEN WE RESUME
+============================================================
+
+FIRST inspect the existing running task/job state.
+
+Find:
+
+- task-1175
+- all child discovery jobs
+- their current status
+- started_at
+- completed_at
+- error state
+- discovered_count
+- unique_count
+- websites_found_count
+- websites_reachable_count
+- websites_verified_count
+- audits_completed_count
+- audits_incomplete_count
+- opportunities_detected_count
+- intent_known_count
+- contactable_count
+- qualified_count
+- sales_ready_count
+- rejected_count
+
+Determine whether task-1175 is:
+
+RUNNING
+COMPLETED
+FAILED
+PARTIALLY_COMPLETED
+STUCK
+
+If it is still running:
+
+DO NOT launch another copy.
+
+Continue monitoring the existing task.
+
+If it completed:
+
+Proceed to final validation.
+
+If it failed:
+
+Inspect the exact failure and resume/retry only the failed work without destroying valid existing data.
+
+============================================================
+IMPLEMENTATION ALREADY COMPLETED
+============================================================
+
+The LeadForge architecture has been hardened with:
+
+- field-level provenance
+- identity verification
+- official website verification
+- operating status
+- deep permitted website crawling
+- phone normalization
+- email verification tiers
+- audit integrity
+- service need evidence
+- independent intent handling
+- contradiction detection
+- field freshness
+- data quality scoring
+- strict lifecycle stages
+- strict qualification
+- human review
+- rejection telemetry
+- source coverage
+- production truth validation
+
+Expected lifecycle:
+
+DISCOVERED
+→ IDENTITY_VERIFIED
+→ WEBSITE_VERIFIED
+→ AUDITED
+→ OPPORTUNITY_DETECTED
+→ CONTACTABLE
+→ QUALIFIED
+→ SALES_READY
+
+============================================================
+STRICT QUALIFICATION
+============================================================
+
+QUALIFIED requires ALL:
+
+identity verified
+AND
+official website verified
+AND
+audit complete
+AND
+opportunity_score >= 60
+AND
+data_quality_score >= 70
+
+SALES_READY requires:
+
+QUALIFIED
+AND
+contactability_score >= 50
+AND
+review_status = APPROVED
+
+Never loosen these requirements to increase lead counts.
+
+============================================================
+CRITICAL TRUTH RULES
+============================================================
+
+1. No synthetic contact names.
+
+Never create:
+
+"Company Lead"
+"Company Team"
+"Owner"
+"Manager"
+"Contact"
+or equivalent inferred people.
+
+If no real person is explicitly identified:
+
+contact_name = NULL
+job_title = NULL
+
+2. No fabricated emails.
+
+3. No fabricated phone numbers.
+
+4. No inferred buying intent.
+
+5. No MX-only mailbox verification.
+
+MX means:
+
+DOMAIN_MAIL_ENABLED
+
+not:
+
+MAILBOX_VERIFIED
+
+6. HTTP 200 does NOT automatically mean official website.
+
+7. Website defects do NOT automatically mean buying intent.
+
+8. Failed/unreachable audits must not receive artificial audit scores.
+
+Use:
+
+AUDIT_INCOMPLETE
+
+and:
+
+overall_score = NULL
+
+when no valid audit measurement exists.
+
+9. Every service opportunity requires concrete measured evidence.
+
+10. Every factual field must have provenance.
+
+============================================================
+FINAL VALIDATION TO RUN
+============================================================
+
+Once task-1175 and all child jobs are completely finished:
+
+Run the complete tests:
+
+python -m pytest backend/tests -v
+
+Then run:
+
+python backend/scripts/assert_no_fake_data.py
+
+Then run the independent live validation:
+
+python backend/scripts/validate_sample_leads.py --count 50
+
+Then generate:
+
+python backend/scripts/generate_production_truth_report.py
+
+============================================================
+IMPORTANT: INDEPENDENT VALIDATION
+============================================================
+
+The 50-lead validation MUST independently re-fetch live evidence.
+
+Do NOT merely compare LeadForge's stored result against another LeadForge calculation.
+
+For every sampled lead independently verify:
+
+- business identity
+- official website
+- operating status
+- phone
+- email provenance
+- contact person
+- audit measurements
+- service opportunity
+- intent
+- freshness
+
+Classify each:
+
+MATCH
+MISMATCH
+SOURCE_CHANGED
+PAGE_UNAVAILABLE
+UNABLE_TO_VERIFY
+
+Calculate:
+
+identity_accuracy
+website_accuracy
+operating_status_accuracy
+phone_accuracy
+email_provenance_accuracy
+contact_person_accuracy
+audit_accuracy
+service_need_accuracy
+intent_accuracy
+freshness_accuracy
+
+Do not claim 100% unless the evidence actually supports it.
+
+============================================================
+FINAL PRODUCTION REPORT
+============================================================
+
+Produce the following final table:
+
+INDUSTRY
+DISCOVERED
+UNIQUE
+WEBSITE_FOUND
+REACHABLE
+OFFICIAL_VERIFIED
+AUDIT_COMPLETE
+AUDIT_INCOMPLETE
+OPPORTUNITIES
+INTENT_KNOWN
+CONTACTABLE
+QUALIFIED
+SALES_READY
+APPROVED
+REJECTED
+
+For every industry.
+
+Then provide totals.
+
+============================================================
+GENUINE SALES-USABLE LEAD DEFINITION
+============================================================
+
+Calculate a separate:
+
+GENUINE_SALES_USABLE_LEADS
+
+A lead qualifies for this number only if:
+
+- real business identity verified
+- operating status ACTIVE or PROBABLY_ACTIVE
+- official website verified OR legitimate web-presence-gap evidence
+- concrete service need evidence
+- data quality >= 70
+- real contact channel exists
+- no unresolved critical conflict
+- no fabricated fields
+- provenance exists
+- lifecycle requirements satisfied
+
+Do NOT inflate this number.
+
+============================================================
+20-LEAD EVIDENCE SAMPLE
+============================================================
+
+If at least 20 genuinely qualified leads exist, show 20.
+
+If fewer exist, show the actual number.
+
+For each:
+
+Company
+Country
+Industry
+Operating Status
+Official Website
+Website Verification Evidence
+Phone
+Phone Source
+Email
+Email Verification Status
+Contact Person
+Contact Source
+Service Need
+Exact Service Evidence
+Intent
+Intent Evidence
+Data Quality Score
+Pipeline Stage
+Review Status
+
+Every field must be traceable.
+
+============================================================
+FINAL ZERO-FABRICATION AUDIT
+============================================================
+
+Scan the entire database for:
+
+example.com
+555 numbers
+placeholder names
+synthetic contacts
+generated emails
+fake domains
+inferred people
+inferred intent
+MX-only mailbox claims
+unverified websites marked official
+audit scores on incomplete crawls
+opportunities without evidence
+sales-ready records without approval
+sales-ready records without contactability
+qualified records violating qualification rules
+
+Expected:
+
+ZERO violations.
+
+If violations exist:
+
+DO NOT hide them.
+
+List:
+
+record ID
+field
+bad value
+reason
+source
+fix
+
+============================================================
+FINAL STATUS
+============================================================
+
+At the end provide exactly one:
+
+PRODUCTION STATUS: READY
+
+OR:
+
+PRODUCTION STATUS: NOT READY
+
+If NOT READY:
+
+List only concrete blockers and required fixes.
+
+If READY:
+
+Provide:
+
+- final 7-industry production numbers
+- total genuine leads
+- total qualified leads
+- total sales-ready leads
+- 50-lead independent validation
+- zero-fabrication result
+- pytest result
+- rejection breakdown
+- contact verification breakdown
+- website verification breakdown
+- evidence completeness
+- remaining known limitations
+
+============================================================
+MOST IMPORTANT INSTRUCTION
+============================================================
+
+DO NOT START FROM ZERO.
+
+DO NOT RESET THE DATABASE.
+
+DO NOT RUN A DUPLICATE PRODUCTION CAMPAIGN.
+
+RESUME FROM THE EXISTING task-1175 STATE.
+
+First determine whether the existing production run has completed.
+
+Then continue from exactly where it stopped.
+
+The goal is NOT maximum lead count.
+
+The goal is:
+
+REAL
+GENUINE
+VERIFIED
+TRACEABLE
+CURRENT
+CONTACTABLE
+EVIDENCE-BACKED
+SALES-USABLE
+
+leads.
+
+No fake data.
+No inferred people.
+No inferred intent.
+No inflated qualification.
+No optimistic reporting.
