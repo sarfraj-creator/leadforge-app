@@ -1,7 +1,7 @@
 import logging
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from backend.app.models.user import Organization, User
+from backend.app.models.user import Organization, User, OrganizationMember, OrgRole
 from backend.app.models.crm import CRMStage
 from backend.app.models.discovery import LeadSourceConfig
 from backend.app.core.security import get_password_hash
@@ -30,9 +30,17 @@ async def ensure_bootstrap_defaults(session: AsyncSession):
             email="admin@leadforge.local",
             hashed_password=get_password_hash("password123"),
             full_name="Alex Mercer",
-            role="ADMIN"
+            is_superuser=True
         )
         session.add(user)
+        await session.flush()
+
+        membership = OrganizationMember(
+            organization_id=org.id,
+            user_id=user.id,
+            role=OrgRole.OWNER
+        )
+        session.add(membership)
         await session.flush()
         logger.info("Created default admin user: %s", user.email)
 
@@ -56,7 +64,8 @@ async def ensure_bootstrap_defaults(session: AsyncSession):
                 name=name,
                 color_code=color,
                 order=order,
-                is_system=True
+                is_won_stage=(name == "Won"),
+                is_lost_stage=(name == "Lost")
             )
             session.add(st)
         logger.info("Initialized default CRM pipeline stages.")
@@ -65,21 +74,20 @@ async def ensure_bootstrap_defaults(session: AsyncSession):
     sources_res = await session.execute(select(LeadSourceConfig).limit(1))
     if not sources_res.scalars().first():
         default_sources = [
-            ("OpenStreetMap Overpass API", "OpenStreetMap", "Live global POI geospatial extraction", 30),
-            ("Google Maps & Places", "GoogleMaps", "Google Places API and live local Maps web index discovery", 30),
-            ("AI Search & Decision Maker Agent", "AISearch", "Autonomous AI deep web & executive LinkedIn discovery", 30),
-            ("Social & LinkedIn Intent Hunter", "SocialIntent", "Real-time buyer intent post prospector across LinkedIn & Google", 35),
-            ("Search Engine Discovery", "SearchEngine", "Public directory & multi-engine index discovery", 20),
-            ("Public Business Registries", "PublicDirectory", "Regional public commercial registries", 15),
-            ("CSV Dataset Adapter", "CSVImport", "User uploaded business records & datasets", 60),
+            ("OpenStreetMap Overpass API", "OpenStreetMap", 30),
+            ("Google Maps & Places", "GoogleMaps", 30),
+            ("AI Search & Decision Maker Agent", "AISearch", 30),
+            ("Social & LinkedIn Intent Hunter", "SocialIntent", 35),
+            ("Search Engine Discovery", "SearchEngine", 20),
+            ("Public Business Registries", "PublicDirectory", 15),
+            ("CSV Dataset Adapter", "CSVImport", 60),
         ]
-        for name, stype, desc, rlimit in default_sources:
+        for name, stype, rlimit in default_sources:
             cfg = LeadSourceConfig(
                 organization_id=org.id,
                 name=name,
                 source_type=stype,
-                description=desc,
-                is_active=True,
+                is_enabled=True,
                 rate_limit_per_min=rlimit
             )
             session.add(cfg)
